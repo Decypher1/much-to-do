@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: muchtodo-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: muchtodo-backend
+  template:
+    metadata:
+      labels:
+        app: muchtodo-backend
+    spec:
+      containers:
+        - name: backend
+          image: much-to-do-backend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MONGO_URI
+              value: mongodb://root:example@mongodb:27017/much_todo_db?authSource=admin
