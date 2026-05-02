@@ -162,10 +162,11 @@ much-to-do/
 │   └── ingress.yaml
 │
 ├── docker-compose.yml
-├── Dockerfile
+├──Dockerfile
+|──Scripts
 └── evidence/               # Screenshots for submission
 ```
-
+ 
 ---
 
 ## ✅ Key Achievements
@@ -177,6 +178,16 @@ much-to-do/
 * Verified application accessibility in both Docker and Kubernetes environments
 
 ---
+
+
+## ⚙️ Automation Scripts
+
+Run the following:
+
+./scripts/docker-build.sh
+./scripts/docker-run.sh
+./scripts/k8s-deploy.sh
+./scripts/k8s-cleanup.sh
 
 ## 🚀 Conclusion
 
