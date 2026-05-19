@@ -1,0 +1,72 @@
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Test Go Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install dependencies
+        run: |
+          cd Server/MuchToDo
+          go mod tidy
+
+      - name: Run tests
+        run: |
+          cd Server/MuchToDo
+          go test ./...
+
+  build:
+    name: Build & Dockerize
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
+
+      - name: Build Docker image
+        run: |
+          cd Server/MuchToDo
+          docker build -t starttech-backend .
+
+      - name: Tag Docker image
+        run: |
+          docker tag starttech-backend:latest ${{ secrets.ECR_URI }}:latest
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.ECR_URI }}:latest
+
+  deploy:
+    name: Deploy to EC2 via ASG
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSM or SSH
+        run: |
+          echo "Trigger rolling deployment (ASG will pick new image)"

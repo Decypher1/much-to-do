@@ -36,3 +36,24 @@ docker-compose.test.yaml
 mongodb.key
 mongo-keyfile
 
+
+new gitignore file for go project
+# Node
+node_modules/
+build/
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
