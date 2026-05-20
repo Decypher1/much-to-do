@@ -194,3 +194,5 @@ Run the following:
 This project demonstrates end-to-end deployment of a backend application from local development to containerized orchestration and Kubernetes deployment. It highlights practical DevOps skills including container management, service networking, and cluster-based deployment.
 
 ---
+
+TRIGGERING THE CI/CD pipeline
