@@ -1,198 +1,122 @@
-# MuchToDo Application – Containerization & Kubernetes Deployment
+# StartTech Application
 
-## 📌 Project Overview
-
-This project demonstrates the containerization and deployment of the **MuchToDo API**, a task management backend built with Go. The application is packaged using Docker, orchestrated with Docker Compose, and deployed to a Kubernetes cluster using Kind.
-
-The objective is to showcase practical DevOps skills, including containerization, multi-service orchestration, and Kubernetes-based deployment with service exposure.
+This repository contains the frontend and backend application code for the StartTech full-stack cloud deployment project.
 
 ---
 
-## 🛠️ Tech Stack
+# Application Stack
 
-* **Backend:** Go (Golang) with Gin framework
-* **Database:** MongoDB
-* **Cache (optional):** Redis
-* **Containerization:** Docker
-* **Orchestration:** Docker Compose
-* **Kubernetes:** Kind (Kubernetes in Docker)
-* **Ingress Controller:** NGINX Ingress
+## Frontend
+
+- React
+- Vite
+- Hosted on Amazon S3
+- Delivered using CloudFront CDN
+
+## Backend
+
+- Golang API
+- Dockerized application
+- Deployed on EC2 instances
+- Managed using Auto Scaling Group
+- Load balanced with Application Load Balancer
 
 ---
 
-## 🐳 Docker Setup
+# CI/CD Pipelines
 
-### 1. Build and Run Containers
+GitHub Actions automates deployment for both frontend and backend services.
+
+## Frontend Pipeline
+
+Workflow:
+```bash
+.github/workflows/frontend-ci-cd.yml
+```
+
+Pipeline stages:
+- Install dependencies
+- Run lint checks
+- Build React application
+- Deploy to S3
+- Invalidate CloudFront cache
+
+---
+
+## Backend Pipeline
+
+Workflow:
+```bash
+.github/workflows/backend-ci-cd.yml
+```
+
+Pipeline stages:
+- Run Go tests
+- Build Docker image
+- Push image to Amazon ECR
+- Deploy backend container
+
+---
+
+# Local Development
+
+## Frontend
 
 ```bash
-docker-compose up -d --build
+cd Client
+npm install
+npm run dev
 ```
 
-### 2. Services Included
-
-* Backend API (`muchtodo-backend`)
-* MongoDB (`mongodb`)
-* Mongo Express (`mongo-express`)
-* Redis (`redis`)
-* Redis Commander (`redis-commander`)
-
-### 3. Verify Running Containers
+## Backend
 
 ```bash
-docker ps
-```
-
-### 4. Access Application
-
-```text
-http://localhost:8080/ping
-```
-
-Expected response:
-
-```json
-{"message":"pong"}
+cd Server/MuchToDo
+go run cmd/api/main.go
 ```
 
 ---
 
-## ☸️ Kubernetes Deployment (Kind)
+# Docker
 
-### 1. Create Cluster
-
-```bash
-kind create cluster --name muchtodo-cluster
-```
-
-### 2. Load Docker Image into Cluster
+## Build Backend Image
 
 ```bash
-kind load docker-image much-to-do-backend:latest --name muchtodo-cluster
-```
-
-### 3. Apply Kubernetes Manifests
-
-```bash
-kubectl apply -f k8s/
-```
-
-### 4. Verify Pods
-
-```bash
-kubectl get pods
+docker build -t starttech-backend .
 ```
 
 ---
 
-## 🌐 Service Exposure
+# AWS Services Used
 
-### Option 1: NodePort (if configured)
-
-```text
-http://localhost:<nodeport>/ping
-```
-
----
-
-### Option 2: Ingress (Recommended)
-
-#### Install Ingress Controller
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-```
-
-#### Apply Ingress Resource
-
-```bash
-kubectl apply -f k8s/ingress.yaml
-```
-
-#### Add Host Entry (Windows)
-
-```text
-127.0.0.1 muchtodo.local
-```
-
-#### Port Forward (Kind Requirement)
-
-```bash
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
-```
-
-#### Access Application
-
-```text
-http://muchtodo.local:8080/ping
-```
-
-Expected response:
-
-```json
-{"message":"pong"}
-```
+- EC2
+- Auto Scaling Group
+- Application Load Balancer
+- Amazon S3
+- CloudFront
+- Amazon ECR
+- ElastiCache Redis
+- CloudWatch
+- MongoDB Atlas
 
 ---
 
-## 📸 Deployment Evidence
+# Security
 
-Screenshots are provided in the `evidence/` folder demonstrating:
-
-1. Docker build process completion
-2. Docker containers running successfully
-3. Application responding via Docker Compose
-4. Kind cluster creation
-5. Kubernetes pods running
-6. Application accessible via Ingress
-7. Kubernetes resources (`pods`, `services`, `ingress`)
+- IAM least privilege access
+- GitHub Secrets for credentials
+- Vulnerability scanning in CI/CD
+- Security Groups for network isolation
 
 ---
 
-## 📂 Project Structure
+# Monitoring
 
-```text
-much-to-do/
-│
-├── Server/MuchToDo/        # Go backend source code
-├── k8s/                    # Kubernetes manifests
-│   ├── backend-deployment.yaml
-│   ├── backend-service.yaml
-│   ├── mongodb-deployment.yaml
-│   ├── mongodb-service.yaml
-│   └── ingress.yaml
-│
-├── docker-compose.yml
-├──Dockerfile
-|──Scripts
-└── evidence/               # Screenshots for submission
-```
- 
----
-
-## ✅ Key Achievements
-
-* Successfully containerized a Go backend application
-* Configured multi-service architecture using Docker Compose
-* Deployed application to Kubernetes using Kind
-* Implemented service exposure via NodePort and Ingress
-* Verified application accessibility in both Docker and Kubernetes environments
+CloudWatch Logs are used for centralized application logging.
 
 ---
 
+# Author
 
-## ⚙️ Automation Scripts
-
-Run the following:
-
-./scripts/docker-build.sh
-./scripts/docker-run.sh
-./scripts/k8s-deploy.sh
-./scripts/k8s-cleanup.sh
-
-## 🚀 Conclusion
-
-This project demonstrates end-to-end deployment of a backend application from local development to containerized orchestration and Kubernetes deployment. It highlights practical DevOps skills including container management, service networking, and cluster-based deployment.
-
----
-
-TRIGGERING THE CI/CD pipeline
+Martins Umekwe
+Cloud Engineering / DevOps Assessment Project
