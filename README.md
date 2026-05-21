@@ -118,5 +118,7 @@ CloudWatch Logs are used for centralized application logging.
 
 # Author
 
+here is the link to the frontend
+https://diumamw7i6hba.cloudfront.net
 Martins Umekwe
 Cloud Engineering / DevOps Assessment Project
